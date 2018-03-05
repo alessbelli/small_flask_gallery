@@ -1,0 +1,21 @@
+<!doctype html>
+<title>Small Gallery website</title>
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function nextImage(){
+            $.getJSON('/get_next_image_url', {
+                img_url: $('#gallery').attr("src"),
+            }, function(data) {
+                $('#gallery').attr("src",data.imageUrl)
+            });
+        }
+        nextImage();
+        setInterval(function(){
+            nextImage()
+        }, 7000);
+    </script>
+</head>
+<body style="background-color:black">
+    <img id="gallery" style="max-width: 100%; max-height:100vh;"/>
+</body>
