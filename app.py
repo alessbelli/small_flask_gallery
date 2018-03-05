@@ -17,9 +17,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def homepage():
-    the_time = datetime.now().strftime("%A, %d %b %Y %l:%M %p")
-
-    return render_template('gallery.html',time=the_time)
+    return render_template('gallery.html')
 
 @app.route('/upload', methods=['GET','POST'])
 def upload_file():
@@ -36,7 +34,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',filename=filename))
+            return redirect(url_for('homepage'))
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
