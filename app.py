@@ -36,6 +36,25 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('homepage'))
 
+@app.route('/list')
+def list_files():
+    files = [url_for('uploaded_file', filename=f) \
+        for f in os.listdir(app.config['UPLOAD_FOLDER']) \
+        if os.path.isfile(os.path.join(app.config['UPLOAD_FOLDER'],f)) ]
+    filenames = [f.split('/')[-1] for f in files]
+    return render_template("list.html", files=files, filenames=filenames)
+
+@app.route('/delete_image')
+def delete_image():
+    item = request.args.get('item')
+    complete_filepath = os.path.join(app.config['UPLOAD_FOLDER'],item) 
+    if (os.path.isfile(complete_filepath)):
+        os.remove(complete_filepath)
+        return jsonify("success")
+    return jsonify("failure")
+
+
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
